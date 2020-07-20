@@ -5,7 +5,8 @@
 </p>
 
 <p align="center">Mobile Arcade Game - 最速になる<br>Created and published by <b>ghxstboy</p>
-
+  
+  <p align="center"><img src="https://github.com/ghxstboy/driftstars-android/workflows/Android%20CI/badge.svg"></p>
 <p align="center">
   <a href="">
     <img alt="Download on the App Store" title="App Store" src="http://i.imgur.com/0n2zqHD.png" width="140">
