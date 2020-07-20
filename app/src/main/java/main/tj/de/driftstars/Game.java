@@ -74,11 +74,17 @@ public class Game {
 
     int ticks;
     private long lastticked;
+    //tbh idk if this is even used lol
     static final float frameRate = 60F;
 
     private void startGameHook() {
+        //Set the state for the android app
         running = true;
 
+        /*
+        Calls the onRender() method according to the frame rates delay
+        This is what handles render stuff
+        */
         Thread renderThread = new Thread() {
             @Override
             public void run() {
@@ -94,6 +100,10 @@ public class Game {
             }
         };
 
+        /*
+        Increases tick count and calls onTick() every 20 milliseconds
+        This is what handles the games update methods and events
+        */
         Thread gameThread = new Thread() {
             @Override
             public void run() {
@@ -114,12 +124,16 @@ public class Game {
         renderThread.start();
     }
 
+    //Everything to render in here
     private void onRender() {
         renderer.invalidate();
     }
 
+    //The number the player starts at
     int start = 40;
     long timertick = 0;
+    
+    //Everything to update in here
     private void onTick() {
 
         //Increase score
@@ -138,24 +152,33 @@ public class Game {
             world.spawnCars(6);
         }
 
-        //Update Entities in world
+        //Update methods for all entities in world (loop tru worlds loaded entity list)
         for(int a = 0; a < world.loadedEntityList.size(); a++) {
             GEntity e = world.loadedEntityList.get(a);
 
             if(!(e instanceof Player)) {
-                //Update Entities in world
+                //Increases entities Y position according to its velocity
                 if(e.getY() <= gameHeight) {
                     float vel = 1F;
+                    /*
+                    Velocity increases as score gets bigger
+                    To make the entities seem faster
+                    */
                     vel *= 1F + (score / 500F) * 4F;
+                    
                     e.setY(e.getY() + vel * e.getVelocity());
 
                 } else {
+                    //Removes entity from the entity list if its y position is greater than the screen height
                     world.removeEntity(e);
 
                     break;
                 }
 
-                //Check for Collision
+                /*
+                If the entity collides with the player it will be removed from the entity list
+                The games values for "collected items" are being increased
+                */
                 if(e.collide(player)) {
                     world.removeEntity(e);
 
@@ -171,11 +194,10 @@ public class Game {
             }
         }
 
-        //Player Movement
+        //Player is being moved to left or right, wether the display is being touched on the left or right side of the screen
         float vel = 1F;
         if(displayTouched) {
-            //float dist = Math.abs((gameWidth / 2F) - touchX) / (gameWidth / 2F);
-            //vel = dist * 1.8F;
+            //Velocity is increased as the score gets bigger
             vel *= 1F + (score  / 800F) * 2F;
 
             if (touchX > gameWidth / 2F) {
@@ -188,14 +210,17 @@ public class Game {
         }
     }
 
+    //Returns the Score as an Integer
     public int getScore() {
         return Math.round(score);
     }
 
+    //Returns the number of frames skipped
     public float getLag() {
         return frameRate - (float) (System.currentTimeMillis() - lastticked);
     }
 
+    //Used to access this classes non static methods from other classes
     public static Game getEngine() {
         return instance;
     }
