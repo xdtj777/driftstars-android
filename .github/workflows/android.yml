@@ -7,10 +7,23 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  check-translations:
+    name: Check Translations
+    # Linux is required since this is a docker container action
     runs-on: ubuntu-latest
-
+    steps:
+      - uses: actions/checkout@v2
+      - id: check_translations
+        uses: ashutoshgngwr/android-translations@v1
+        with:
+          projectDir: ./
+      - name: Add comment
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: 1
+          body: ${{ steps.check_translations.outputs.report }}
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: set up JDK 1.8
