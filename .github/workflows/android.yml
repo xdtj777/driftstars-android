@@ -17,11 +17,6 @@ jobs:
         uses: ashutoshgngwr/android-translations@v1
         with:
           projectDir: ./
-      - name: Add comment
-        uses: peter-evans/create-or-update-comment@v1
-        with:
-          issue-number: 1
-          body: ${{ steps.check_translations.outputs.report }}
   build:
     runs-on: ubuntu-latest
     steps:
